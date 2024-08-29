@@ -1,4 +1,5 @@
 
+import { usePatientStore } from '../store'
 import { Pacient } from '../types'
 import { PatientDetailItem } from './PatientDetailItem'
 
@@ -6,6 +7,8 @@ type PatiensDetailProps = {
     patient: Pacient
 }
 export const PatiensDetail = ({ patient }: PatiensDetailProps) => {
+    const deletePatient = usePatientStore((state) => state.deletePatient)
+    const getPatienById = usePatientStore((state) => state.getPatienById)
     return (
         <div className='mx-5 my-10 px-5 p-10 bg-white shadow-md rounded-xl'>
 
@@ -17,11 +20,13 @@ export const PatiensDetail = ({ patient }: PatiensDetailProps) => {
             <PatientDetailItem label='Sintomas: ' data={patient.symptoms} />
             <div className='flex justify-between gap-3 mt-10'>
                 <button
+                    onClick={() => getPatienById(patient.id)}
                     type='button'
                     className='py-2 px-10 bg-indigo-600 hover:bg-indigo-700 text-white font-bold uppercase rounded-lg'>
                     Editar
                 </button>
                 <button
+                    onClick={() => deletePatient(patient.id)}
                     type='button'
                     className='py-2 px-10 bg-red-600 hover:bg-red-700 text-white font-bold uppercase rounded-lg'>
                     Eliminar
