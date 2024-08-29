@@ -9,6 +9,7 @@ type PatiensDetailProps = {
 export const PatiensDetail = ({ patient }: PatiensDetailProps) => {
     const deletePatient = usePatientStore((state) => state.deletePatient)
     const getPatienById = usePatientStore((state) => state.getPatienById)
+
     return (
         <div className='mx-5 my-10 px-5 p-10 bg-white shadow-md rounded-xl'>
 

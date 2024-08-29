@@ -2,16 +2,37 @@ import { useForm } from "react-hook-form"
 import Error from "./Error"
 import type { DraftPacient } from "../types"
 import { usePatientStore } from "../store"
+import { useEffect } from "react"
 
 export default function PatientForm() {
-    const { addPatient } = usePatientStore()
-    const { reset, register, handleSubmit, formState: { errors } } = useForm<DraftPacient>()
+    const { addPatient, activeId, patient, updatePatient } = usePatientStore()
+
+    const { reset, register, handleSubmit, setValue, formState: { errors } } = useForm<DraftPacient>()
+    useEffect(() => {
+        if (activeId) {
+            const activePatient = patient.filter(patient => patient.id === activeId)[0]
+            setValue('name', activePatient.name)
+            setValue('caretaker', activePatient.caretaker)
+            setValue('email', activePatient.email)
+            setValue('date', activePatient.date)
+            setValue('symptoms', activePatient.symptoms)
+        }
+    }, [activeId])
 
     const regierterPacient = (data: DraftPacient) => {
-        addPatient(data)
-        reset()
+        if (activeId) {
+            updatePatient(data)
+            reset()
+        } else {
+            addPatient(data)
+            reset()
+        }
+
+
 
     }
+
+
     return (
         <div className="md:w-1/2 lg:w-2/5 mx-5">
             <h2 className="font-black text-3xl text-center">Seguimiento Pacientes</h2>

@@ -1,19 +1,21 @@
 import { create } from "zustand"
 import { v4 as uuidv4 } from 'uuid'
 import { DraftPacient, Pacient } from "./types"
+import { devtools } from 'zustand/middleware'
 type PatienetSate = {
     patient: Pacient[],
     activeId: Pacient['id'],
     addPatient: (data: DraftPacient) => void
     deletePatient: (id: Pacient['id']) => void
     getPatienById: (id: Pacient['id']) => void
+    updatePatient: (data: DraftPacient) => void
 }
 
 const createPatient = (patient: DraftPacient): Pacient => {
     return { ...patient, id: uuidv4() }
 }
 
-export const usePatientStore = create<PatienetSate>((set) => ({
+export const usePatientStore = create<PatienetSate>()(devtools((set) => ({
     patient: [],
     activeId: '',
     addPatient: (data) => {
@@ -34,5 +36,13 @@ export const usePatientStore = create<PatienetSate>((set) => ({
             activeId: id
         }
         ))
+    },
+    updatePatient: (data) => {
+        set((state) => ({
+            patient: state.patient.map(patient => patient.id === state.activeId ? { id: state.activeId, ...data } : patient),
+            activeId: ''
+
+        }))
     }
-}))
+})
+))
